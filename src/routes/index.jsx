@@ -5,11 +5,8 @@ import { Register } from "../pages/Register";
 
 export const RoutesMain = ({ user, setUser }) => (
   <Routes>
-    <Route
-      path="/"
-      element={<Login setUser={setUser} user={user}></Login>}
-    ></Route>
-    <Route path="/register" element={<Register user={user}></Register>}></Route>
+    <Route path="/" element={<Login></Login>}></Route>
+    <Route path="/register" element={<Register></Register>}></Route>
     <Route
       path="/dashboard"
       element={<Dashboard user={user} setUser={setUser}></Dashboard>}
