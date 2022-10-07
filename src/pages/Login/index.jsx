@@ -12,7 +12,7 @@ import { api } from "../../services/axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
-export const Login = ({ setUser }) => {
+export const Login = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("@KenzieHub:token");
 
@@ -29,7 +29,6 @@ export const Login = ({ setUser }) => {
       .post("/sessions", data)
       .then((res) => {
         toast.success("Login realizado com sucesso!");
-        setUser(res.data.user);
         localStorage.setItem("@KenzieHub:token", res.data.token);
         localStorage.setItem("@KenzieHub:userId", res.data.user.id);
         navigate("/dashboard");
