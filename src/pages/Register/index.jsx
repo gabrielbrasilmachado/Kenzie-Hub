@@ -12,8 +12,9 @@ import { api } from "../../services/axios";
 import { schemaRegister } from "../../validations/register";
 import { useEffect } from "react";
 
-export const Register = ({ user }) => {
+export const Register = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("@KenzieHub:token");
 
   const {
     register,
@@ -36,10 +37,10 @@ export const Register = ({ user }) => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (token) {
       navigate("/dashboard");
     }
-  }, [user, navigate]);
+  }, [token, navigate]);
 
   return (
     <MainStyled>

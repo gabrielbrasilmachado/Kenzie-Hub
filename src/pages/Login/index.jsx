@@ -12,8 +12,9 @@ import { api } from "../../services/axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
-export const Login = ({ user, setUser }) => {
+export const Login = ({ setUser }) => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("@KenzieHub:token");
 
   const {
     register,
@@ -39,10 +40,10 @@ export const Login = ({ user, setUser }) => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (token) {
       navigate("/dashboard");
     }
-  }, [user]);
+  }, [token, navigate]);
 
   return (
     <MainStyled>
