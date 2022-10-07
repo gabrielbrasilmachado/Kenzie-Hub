@@ -25,12 +25,14 @@ export const InputPassword = ({
         {error && <InputError error={error.message}></InputError>}
         {inputType === "password" ? (
           <EyeInvisible
+            error={error}
             onClick={() => {
               setInputType("text");
             }}
           ></EyeInvisible>
         ) : (
           <Eye
+            error={error}
             onClick={() => {
               setInputType("password");
             }}
