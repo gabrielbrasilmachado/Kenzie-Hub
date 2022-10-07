@@ -6,15 +6,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
   return (
     <div>
       <GlobalStyle />
-      <RoutesMain
-        isLoggedIn={isLoggedIn}
-        setIsLoggedIn={setIsLoggedIn}
-      ></RoutesMain>
+      <RoutesMain user={user} setUser={setUser}></RoutesMain>
       <ToastContainer
         position="top-right"
         autoClose={1500}

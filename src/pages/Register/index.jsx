@@ -2,7 +2,6 @@ import { FormStyled } from "../../components/Form";
 import Logo from "../../assets/Logo.png";
 import { MainStyled, SelectStyledDiv } from "./style";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Input } from "../../components/Input";
 import { InputPassword } from "../../components/InputPassword";
@@ -10,38 +9,18 @@ import { Button } from "../../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { api } from "../../services/axios";
+import { schemaRegister } from "../../validations/register";
+import { useEffect } from "react";
 
-export const Register = ({ isLoggedIn, setIsLoggedIn }) => {
+export const Register = ({ user }) => {
   const navigate = useNavigate();
-
-  const schema = yup.object().shape({
-    name: yup.string().required("Nome obrigatório."),
-    email: yup
-      .string()
-      .required("E-mail obrigatório.")
-      .email("Digite um e-mail válido!"),
-    password: yup
-      .string()
-      .required("Senha obrigatória.")
-      .min(8, "A senha deve ter no mínimo 8 caracteres")
-      .matches(/[a-z]/, "Deve conter ao menos uma letra minúscula")
-      .matches(/[A-Z]/, "Deve conter ao menos uma letra maiúscula")
-      .matches(/\d/, "Deve conter ao menos um número")
-      .matches(/\W|_/, "Deve conter ao menos um caracter especial"),
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref("password")], "As senhas devem ser iguais!"),
-    bio: yup.string().required("Bio obrigatória."),
-    contact: yup.string().required("Contato obrigatório."),
-    course_module: yup.string().required("Selecione um módulo."),
-  });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schemaRegister),
   });
 
   const submitRegister = (data) => {
@@ -55,6 +34,13 @@ export const Register = ({ isLoggedIn, setIsLoggedIn }) => {
         toast.error(err.response.data.message);
       });
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
+
   return (
     <MainStyled>
       <div className="divLogo">
