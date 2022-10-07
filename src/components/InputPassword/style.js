@@ -64,13 +64,21 @@ export const EyeInvisible = styled(AiFillEyeInvisible)`
 
     position: absolute;
 
-    top: 36px;
-    right: 15px;
+    ${props => props.error ? css
+        `top: 36px;
+        right: 35px;`
+        : css
+            `top: 36px; 
+        right: 15px;`}
 
     cursor: pointer;
     @media (min-width: 768px) {
-        top: 42px;
-        right: 16px;
+        ${props => props.error ? css
+        `top: 42px;
+        right: 36px;;`
+        : css
+            `top: 42px;
+        right: 16px;`}
     }
 `
 
@@ -79,12 +87,20 @@ export const Eye = styled(AiFillEye)`
 
     position: absolute;
 
-    top: 36px;
-    right: 15px;
+    ${props => props.error ? css
+        `top: 36px;
+        right: 35px;`
+        : css
+            `top: 36px; 
+        right: 15px;`}
 
     cursor: pointer;
     @media (min-width: 768px) {
-        top: 42px;
-        right: 16px;
+        ${props => props.error ? css
+        `top: 42px;
+        right: 36px;;`
+        : css
+            `top: 42px;
+        right: 16px;`}
     }
 `
