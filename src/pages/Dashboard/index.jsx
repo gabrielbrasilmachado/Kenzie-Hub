@@ -2,21 +2,32 @@ import { MainStyled, UserSection, SectionStyled } from "./style";
 import Logo from "../../assets/Logo.png";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../services/axios";
 
 export const Dashboard = ({ user, setUser }) => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("@KenzieHub:token");
+
+  useEffect(() => {
+    api
+      .get("/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setUser(res.data))
+      .catch((err) => console.log(err));
+  }, [token, setUser]);
 
   const logout = () => {
     localStorage.removeItem("@KenzieHub:token");
     localStorage.removeItem("@KenzieHub:userId");
-    setUser(null);
+    navigate("/");
   };
 
   useEffect(() => {
-    if (user === null) {
+    if (!token) {
       navigate("/");
     }
-  }, [user, navigate]);
+  }, [token, navigate]);
   return (
     <MainStyled>
       <header>
