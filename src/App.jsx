@@ -4,13 +4,16 @@ import { RoutesMain } from "./routes/index.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserProvider } from "./contexts/UserContext.jsx";
+import { TechProvider } from "./contexts/TechContext.jsx";
 
 function App() {
   return (
     <div>
       <GlobalStyle />
       <UserProvider>
-        <RoutesMain></RoutesMain>
+        <TechProvider>
+          <RoutesMain></RoutesMain>
+        </TechProvider>
       </UserProvider>
       <ToastContainer
         position="top-right"
