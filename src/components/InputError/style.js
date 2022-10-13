@@ -26,20 +26,21 @@ export const DivError = styled.div`
 
         position: absolute;
         top: -60px;
-        right: -87px;
+        right: -45px;
         z-index: 200;
 
         border-radius: 4px;
 
-        padding: 0px 5px;
+        padding: 5px 15px;
 
-        width: 200px;
-        height: 50px;
+        width: 120px;
+        height: fit-content;
 
         background-color: var(--gray-0);
 
         p{
-            text-align: left;
+            font-weight: 600;
+            text-align: center;
             color: var(--error);
         }
     }

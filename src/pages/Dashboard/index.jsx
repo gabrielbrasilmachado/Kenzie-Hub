@@ -1,60 +1,110 @@
-import { MainStyled, UserSection, SectionStyled } from "./style";
+import { Header, TechsAdd, TechsList, DivStyled } from "./style";
 import Logo from "../../assets/Logo.png";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { api } from "../../services/axios";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import { Loading } from "../../components/Loading";
+import { Modal } from "../../components/Modal";
+import { ModalAdd } from "../../components/ModalAdd";
+import { TechContext } from "../../contexts/TechContext";
+import { ModalEdit } from "../../components/ModalEdit";
+import { ListLoading } from "../../components/ListLoading/ListLoading";
 
-export const Dashboard = ({ user, setUser }) => {
+export const Dashboard = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("@KenzieHub:token");
 
-  useEffect(() => {
-    api
-      .get("/profile", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => setUser(res.data))
-      .catch((err) => console.log(err));
-  }, [token, setUser]);
+  const { user, loading, setUser } = useContext(UserContext);
+  const {
+    modal,
+    setModal,
+    modalType,
+    setModalType,
+    techs,
+    setCurrentTech,
+    listLoading,
+  } = useContext(TechContext);
 
   const logout = () => {
+    setUser(null);
     localStorage.removeItem("@KenzieHub:token");
     localStorage.removeItem("@KenzieHub:userId");
     navigate("/");
   };
 
-  useEffect(() => {
-    if (!token) {
-      navigate("/");
-    }
-  }, [token, navigate]);
-  return (
-    <MainStyled>
-      <header>
+  const setEditTech = (id) => {
+    const tech = techs.find((item) => item.id === id);
+    setCurrentTech(tech);
+    setModalType("edit");
+    setModal(true);
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  return user ? (
+    <DivStyled>
+      <nav>
         <div className="container">
           <figure>
             <img src={Logo} alt="Logo da Kenzie Hub" />
           </figure>
           <button onClick={() => logout()}>Sair</button>
         </div>
-      </header>
+      </nav>
+      <Header>
+        <div className="container">
+          <p>Olá, {user?.name}</p>
+          <span>{user?.course_module}</span>
+        </div>
+      </Header>
       <main>
-        <UserSection>
+        <TechsAdd>
           <div className="container">
-            <p>Olá, {user?.name}</p>
-            <span>{user?.course_module}</span>
+            <p>Tecnologias</p>
+            <button
+              type="button"
+              className="buttonAdd"
+              onClick={() => {
+                setModalType("register");
+                setModal(true);
+              }}
+            >
+              +
+            </button>
           </div>
-        </UserSection>
-        <SectionStyled>
-          <div className="container">
-            <p>Que pena! Estamos em desenvolvimento :(</p>
-            <span>
-              Nossa aplicação está em desenvolvimento, em breve teremos
-              novidades
-            </span>
-          </div>
-        </SectionStyled>
+        </TechsAdd>
+        <TechsList>
+          {listLoading ? (
+            <ListLoading></ListLoading>
+          ) : (
+            techs.map((item) => {
+              return (
+                <li
+                  onClick={() => {
+                    setEditTech(item.id);
+                  }}
+                  key={item.id}
+                >
+                  <p>{item.title}</p>
+                  <span>{item.status}</span>
+                </li>
+              );
+            })
+          )}
+        </TechsList>
       </main>
-    </MainStyled>
+      {modal && (
+        <Modal>
+          {modalType === "register" ? (
+            <ModalAdd></ModalAdd>
+          ) : (
+            <ModalEdit></ModalEdit>
+          )}
+        </Modal>
+      )}
+    </DivStyled>
+  ) : (
+    <Navigate to={"/"}></Navigate>
   );
 };
