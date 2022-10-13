@@ -1,17 +1,17 @@
-import { useState } from "react";
 import "./styles/global.js";
 import { GlobalStyle } from "./styles/global";
 import { RoutesMain } from "./routes/index.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UserProvider } from "./contexts/UserContext.jsx";
 
 function App() {
-  const [user, setUser] = useState(null);
-
   return (
     <div>
       <GlobalStyle />
-      <RoutesMain user={user} setUser={setUser}></RoutesMain>
+      <UserProvider>
+        <RoutesMain></RoutesMain>
+      </UserProvider>
       <ToastContainer
         position="top-right"
         autoClose={1500}

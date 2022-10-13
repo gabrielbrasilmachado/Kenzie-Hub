@@ -4,17 +4,16 @@ import { FormStyled } from "../../components/Form";
 import { Input } from "../../components/Input";
 import { InputPassword } from "../../components/InputPassword";
 import { Button } from "../../components/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaLogin } from "../../validations/login";
-import { api } from "../../services/axios";
-import { toast } from "react-toastify";
-import { useEffect } from "react";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import { Loading } from "../../components/Loading";
 
 export const Login = () => {
-  const navigate = useNavigate();
-  const token = localStorage.getItem("@KenzieHub:token");
+  const { submitLogin, user, loading } = useContext(UserContext);
 
   const {
     register,
@@ -24,27 +23,13 @@ export const Login = () => {
     resolver: yupResolver(schemaLogin),
   });
 
-  const submitLogin = (data) => {
-    api
-      .post("/sessions", data)
-      .then((res) => {
-        toast.success("Login realizado com sucesso!");
-        localStorage.setItem("@KenzieHub:token", res.data.token);
-        localStorage.setItem("@KenzieHub:userId", res.data.user.id);
-        navigate("/dashboard");
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
-  };
+  if (loading) {
+    return <Loading />;
+  }
 
-  useEffect(() => {
-    if (token) {
-      navigate("/dashboard");
-    }
-  }, [token, navigate]);
-
-  return (
+  return user ? (
+    <Navigate to={"/dashboard"}></Navigate>
+  ) : (
     <MainStyled>
       <figure>
         <img src={Logo} alt="Logo da Kenzie Hub" />

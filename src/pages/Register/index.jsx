@@ -6,15 +6,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Input } from "../../components/Input";
 import { InputPassword } from "../../components/InputPassword";
 import { Button } from "../../components/Button";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { api } from "../../services/axios";
 import { schemaRegister } from "../../validations/register";
-import { useEffect } from "react";
+import { Link, Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import { Loading } from "../../components/Loading";
 
 export const Register = () => {
-  const navigate = useNavigate();
-  const token = localStorage.getItem("@KenzieHub:token");
+  const { submitRegister, user, loading } = useContext(UserContext);
 
   const {
     register,
@@ -24,25 +23,13 @@ export const Register = () => {
     resolver: yupResolver(schemaRegister),
   });
 
-  const submitRegister = (data) => {
-    api
-      .post("/users", data)
-      .then((res) => {
-        toast.success("Cadastro realizado com sucesso!");
-        navigate("/");
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
-  };
+  if (loading) {
+    return <Loading />;
+  }
 
-  useEffect(() => {
-    if (token) {
-      navigate("/dashboard");
-    }
-  }, [token, navigate]);
-
-  return (
+  return user ? (
+    <Navigate to={"/dashboard"}></Navigate>
+  ) : (
     <MainStyled>
       <div className="divLogo">
         <figure>

@@ -8,13 +8,9 @@ export const GlobalStyle = createGlobalStyle`
         font-family: 'Inter', sans-serif;
     }
 
-    body{
-        width: 100vw;
-        height: 100vh;
-    }
-
-    ul, ol, li{
+    ul, ol, li, button{
         list-style: none;
+        transition: 0.2s ease;
     }
 
     a{
