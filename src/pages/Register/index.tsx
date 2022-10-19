@@ -9,7 +9,7 @@ import { Button } from "../../components/Button";
 import { schemaRegister } from "../../validations/register";
 import { Link, Navigate } from "react-router-dom";
 import { useContext } from "react";
-import { UserContext } from "../../contexts/UserContext";
+import { iSubmitRegister, UserContext } from "../../contexts/UserContext";
 import { Loading } from "../../components/Loading";
 
 export const Register = () => {
@@ -19,7 +19,7 @@ export const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<iSubmitRegister>({
     resolver: yupResolver(schemaRegister),
   });
 
@@ -47,7 +47,7 @@ export const Register = () => {
           type={"text"}
           placeholder={"Digite aqui seu nome"}
           register={register("name")}
-          error={errors.name}
+          error={errors.name?.message}
         ></Input>
         <Input
           label={"E-mail"}
@@ -56,7 +56,7 @@ export const Register = () => {
           type={"email"}
           placeholder={"Digite aqui seu email"}
           register={register("email")}
-          error={errors.email}
+          error={errors.email?.message}
         ></Input>
         <InputPassword
           label={"Senha"}
@@ -64,7 +64,7 @@ export const Register = () => {
           name={"passwordRegister"}
           placeholder={"Digite aqui sua senha"}
           register={register("password")}
-          error={errors.password}
+          error={errors.password?.message}
         ></InputPassword>
         <InputPassword
           label={"Confirmar Senha"}
@@ -72,7 +72,7 @@ export const Register = () => {
           name={"confirmPassword"}
           placeholder={"Digite novamente sua senha"}
           register={register("confirmPassword")}
-          error={errors.confirmPassword}
+          error={errors.confirmPassword?.message}
         ></InputPassword>
         <Input
           label={"Bio"}
@@ -81,7 +81,7 @@ export const Register = () => {
           type={"text"}
           placeholder={"Fale sobre você"}
           register={register("bio")}
-          error={errors.bio}
+          error={errors.bio?.message}
         ></Input>
         <Input
           label={"Contato"}
@@ -90,14 +90,14 @@ export const Register = () => {
           type={"text"}
           placeholder={"Opção de contato"}
           register={register("contact")}
-          error={errors.contact}
+          error={errors.contact?.message}
         ></Input>
         <SelectStyledDiv>
           <label htmlFor="course_module">Selecionar módulo</label>
           <select
-            name="course_module"
             id="course_module"
             {...register("course_module")}
+            name="course_module"
           >
             <option value="Primeiro módulo (Introdução ao Frontend)">
               Primeiro módulo

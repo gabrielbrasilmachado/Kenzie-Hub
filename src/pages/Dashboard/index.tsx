@@ -31,7 +31,7 @@ export const Dashboard = () => {
     navigate("/");
   };
 
-  const setEditTech = (id) => {
+  const setEditTech = (id: string) => {
     const tech = techs.find((item) => item.id === id);
     setCurrentTech(tech);
     setModalType("edit");

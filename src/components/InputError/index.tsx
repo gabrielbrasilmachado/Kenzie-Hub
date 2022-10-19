@@ -1,6 +1,10 @@
 import { DivError, ErrorIcon } from "./style";
 
-export const InputError = ({ error }) => {
+interface iInputErrorProps {
+  error: string | undefined;
+}
+
+export const InputError = ({ error }: iInputErrorProps) => {
   return (
     <DivError>
       <ErrorIcon></ErrorIcon>
