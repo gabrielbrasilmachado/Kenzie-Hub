@@ -1,10 +1,10 @@
-import "./styles/global.js";
+import "./styles/global.ts";
 import { GlobalStyle } from "./styles/global";
-import { RoutesMain } from "./routes/index.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { UserProvider } from "./contexts/UserContext.jsx";
-import { TechProvider } from "./contexts/TechContext.jsx";
+import { RoutesMain } from "./routes";
+import { UserProvider } from "./contexts/UserContext";
+import { TechProvider } from "./contexts/TechContext";
 
 function App() {
   return (

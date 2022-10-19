@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { TechContext } from "../../contexts/TechContext";
+import { iEditTech, TechContext } from "../../contexts/TechContext";
 import { schemaEditTecnology } from "../../validations/editTecnology";
 import { InputError } from "../InputError";
 import { ButtonsDiv, ModalEditStyled, SelectStyledDiv } from "./style";
@@ -14,12 +14,12 @@ export const ModalEdit = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<iEditTech>({
     resolver: yupResolver(schemaEditTecnology),
   });
 
   return (
-    <ModalEditStyled error={errors.status}>
+    <ModalEditStyled>
       <div className="modalHeader">
         <p>Tecnologia Detalhes</p>
         <button
@@ -35,15 +35,15 @@ export const ModalEdit = () => {
         <input
           id="tech"
           type="text"
-          defaultValue={currentTech.title}
+          defaultValue={currentTech?.title}
           readOnly
         />
-        <SelectStyledDiv error={errors.status}>
+        <SelectStyledDiv error={errors.status?.message}>
           <label htmlFor="status">Selecionar status</label>
           <select
-            name="status"
             id="status"
             {...register("status")}
+            name="status"
             defaultValue={""}
           >
             <option value="">Selecione uma opção</option>

@@ -2,6 +2,15 @@ import { useState } from "react";
 import { InputError } from "../InputError";
 import { DivInputStyled, Eye, EyeInvisible } from "./style";
 
+interface iInputPasswordProps {
+  label: string;
+  id: string;
+  name: string;
+  placeholder: string;
+  register: object;
+  error: string | undefined;
+}
+
 export const InputPassword = ({
   label,
   id,
@@ -9,7 +18,7 @@ export const InputPassword = ({
   placeholder,
   register,
   error,
-}) => {
+}: iInputPasswordProps) => {
   const [inputType, setInputType] = useState("password");
   return (
     <DivInputStyled error={error}>
@@ -22,7 +31,7 @@ export const InputPassword = ({
           placeholder={placeholder}
           {...register}
         />
-        {error && <InputError error={error.message}></InputError>}
+        {error && <InputError error={error}></InputError>}
         {inputType === "password" ? (
           <EyeInvisible
             error={error}

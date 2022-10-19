@@ -1,6 +1,16 @@
 import { InputError } from "../InputError";
 import { DivInputStyled } from "./style";
 
+interface iInputProps {
+  label: string;
+  id: string;
+  name: string;
+  type: string;
+  placeholder: string;
+  register: object;
+  error: string | undefined;
+}
+
 export const Input = ({
   label,
   id,
@@ -9,7 +19,7 @@ export const Input = ({
   placeholder,
   register,
   error,
-}) => {
+}: iInputProps) => {
   return (
     <DivInputStyled error={error}>
       <label htmlFor={id}>{label}</label>
@@ -20,7 +30,7 @@ export const Input = ({
         placeholder={placeholder}
         {...register}
       />
-      {error && <InputError error={error.message}></InputError>}
+      {error && <InputError error={error}></InputError>}
     </DivInputStyled>
   );
 };

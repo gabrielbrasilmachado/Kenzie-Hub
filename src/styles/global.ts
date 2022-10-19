@@ -40,4 +40,4 @@ export const GlobalStyle = createGlobalStyle`
         --toastify-icon-color-success: var(--toastify-color-success);
         --toastify-icon-color-error: var(--toastify-color-error);
     }
-`
+`;

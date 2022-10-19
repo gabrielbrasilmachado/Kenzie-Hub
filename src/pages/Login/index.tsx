@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaLogin } from "../../validations/login";
 import { useContext } from "react";
-import { UserContext } from "../../contexts/UserContext";
+import { iSubmitLogin, UserContext } from "../../contexts/UserContext";
 import { Loading } from "../../components/Loading";
 
 export const Login = () => {
@@ -19,7 +19,7 @@ export const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<iSubmitLogin>({
     resolver: yupResolver(schemaLogin),
   });
 
@@ -43,7 +43,7 @@ export const Login = () => {
           type={"email"}
           placeholder={"Digite aqui seu email"}
           register={register("email")}
-          error={errors.email}
+          error={errors.email?.message}
         ></Input>
         <InputPassword
           label={"Senha"}
@@ -51,7 +51,7 @@ export const Login = () => {
           name={"passwordLogin"}
           placeholder={"Digite aqui sua senha"}
           register={register("password")}
-          error={errors.password}
+          error={errors.password?.message}
         ></InputPassword>
         <Button type={"submit"} text={"Entrar"}></Button>
         <DivSignup>
