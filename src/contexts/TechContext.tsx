@@ -2,7 +2,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { api } from "../services/axios";
 import { HeadersDefaults } from "axios";
-import { iTechs } from "./UserContext";
+import { iTechs, iUser } from "./UserContext";
 
 interface CommonHeaderProperties extends HeadersDefaults {
   authorization: string;
@@ -25,6 +25,8 @@ interface iTechContext {
   deleteTech: () => void;
   listLoading: boolean;
   setListLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface iSubmitTech {
@@ -36,6 +38,19 @@ export interface iEditTech {
   status: string;
 }
 
+interface iSubmitTechResponse {
+  id: string;
+  title: string;
+  status: string;
+  user: {
+    id: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+
+type iEditTechResponse = Omit<iSubmitTechResponse, "user">;
+
 export const TechContext = createContext<iTechContext>({} as iTechContext);
 
 export const TechProvider = ({ children }: iTechsContextProps) => {
@@ -44,13 +59,18 @@ export const TechProvider = ({ children }: iTechsContextProps) => {
   const [techs, setTechs] = useState<iTechs[]>([]);
   const [currentTech, setCurrentTech] = useState<iTechs | undefined>(undefined);
   const [listLoading, setListLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const submitTech = async (data: iSubmitTech) => {
+  const submitTech = async (body: iSubmitTech) => {
     try {
       setListLoading(true);
-      await api.post("/users/techs", data);
+      const { data } = await api.post<iSubmitTechResponse>(
+        "/users/techs",
+        body
+      );
       toast.success("Tecnologia cadastrada com sucesso!");
       setModal(false);
+      setTechs([...techs, data]);
       setListLoading(false);
     } catch (err) {
       toast.error(
@@ -62,7 +82,7 @@ export const TechProvider = ({ children }: iTechsContextProps) => {
   const editTech = async (data: iEditTech) => {
     try {
       setListLoading(true);
-      await api.put(`/users/techs/${currentTech?.id}`, data);
+      await api.put<iEditTechResponse>(`/users/techs/${currentTech?.id}`, data);
       toast.success("Tecnologia editada com sucesso!");
       setModal(false);
       setListLoading(false);
@@ -84,20 +104,21 @@ export const TechProvider = ({ children }: iTechsContextProps) => {
   };
 
   useEffect(() => {
-    async function LoadTechs() {
+    async function LoadTechs(): Promise<void> {
       const token = localStorage.getItem("@KenzieHub:token");
       if (token) {
         api.defaults.headers = {
           authorization: `Bearer ${token}`,
         } as CommonHeaderProperties;
         try {
-          const { data } = await api.get("/profile");
+          const { data } = await api.get<iUser>("/profile");
           setTechs(data.techs);
         } catch (err) {
           console.error(err);
           localStorage.removeItem("@KenzieHub:token");
           localStorage.removeItem("@KenzieHub:userId");
         } finally {
+          setLoading(false);
           setListLoading(false);
         }
       }
@@ -121,6 +142,8 @@ export const TechProvider = ({ children }: iTechsContextProps) => {
         deleteTech,
         listLoading,
         setListLoading,
+        loading,
+        setLoading,
       }}
     >
       {children}
