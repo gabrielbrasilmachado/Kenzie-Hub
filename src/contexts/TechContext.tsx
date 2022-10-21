@@ -19,14 +19,13 @@ interface iTechContext {
   modalType: string;
   setModalType: React.Dispatch<React.SetStateAction<string>>;
   techs: iTechs[];
+  setTechs: React.Dispatch<React.SetStateAction<iTechs[]>>;
   currentTech: iTechs | undefined;
   setCurrentTech: React.Dispatch<React.SetStateAction<iTechs | undefined>>;
   editTech: (data: iEditTech) => void;
   deleteTech: () => void;
   listLoading: boolean;
   setListLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface iSubmitTech {
@@ -59,7 +58,6 @@ export const TechProvider = ({ children }: iTechsContextProps) => {
   const [techs, setTechs] = useState<iTechs[]>([]);
   const [currentTech, setCurrentTech] = useState<iTechs | undefined>(undefined);
   const [listLoading, setListLoading] = useState<boolean>(true);
-  const [loading, setLoading] = useState<boolean>(true);
 
   const submitTech = async (body: iSubmitTech) => {
     try {
@@ -117,11 +115,9 @@ export const TechProvider = ({ children }: iTechsContextProps) => {
           console.error(err);
           localStorage.removeItem("@KenzieHub:token");
           localStorage.removeItem("@KenzieHub:userId");
-        } finally {
-          setLoading(false);
-          setListLoading(false);
         }
       }
+      setListLoading(false);
     }
 
     LoadTechs();
@@ -136,14 +132,13 @@ export const TechProvider = ({ children }: iTechsContextProps) => {
         modalType,
         setModalType,
         techs,
+        setTechs,
         currentTech,
         setCurrentTech,
         editTech,
         deleteTech,
         listLoading,
         setListLoading,
-        loading,
-        setLoading,
       }}
     >
       {children}

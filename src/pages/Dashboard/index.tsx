@@ -13,7 +13,7 @@ import { ListLoading } from "../../components/ListLoading/ListLoading";
 export const Dashboard = () => {
   const navigate = useNavigate();
 
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, loading } = useContext(UserContext);
   const {
     modal,
     setModal,
@@ -22,7 +22,6 @@ export const Dashboard = () => {
     techs,
     setCurrentTech,
     listLoading,
-    loading,
   } = useContext(TechContext);
 
   const logout = () => {
