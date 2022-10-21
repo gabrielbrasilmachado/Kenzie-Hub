@@ -21,22 +21,17 @@ interface iUserContextProps {
 }
 
 export interface iUser {
-  course_module: ReactNode;
-  name: ReactNode;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    course_module: string;
-    bio: string;
-    contact: string;
-    techs: iTechs[];
-    works: [];
-    created_at: string;
-    updated_at: string;
-    avatar_url: null;
-  };
-  token: string;
+  id: string;
+  name: string;
+  email: string;
+  course_module: string;
+  bio: string;
+  contact: string;
+  techs: iTechs[];
+  works: [];
+  created_at: string;
+  updated_at: string;
+  avatar_url: null;
 }
 
 export interface iTechs {
@@ -62,6 +57,15 @@ export interface iSubmitRegister {
   course_module: string;
 }
 
+interface iLoginResponse {
+  course_module: ReactNode;
+  name: ReactNode;
+  user: iUser;
+  token: string;
+}
+
+type iRegisterResponse = Omit<iUser, "techs" | "works">;
+
 export const UserContext = createContext<iUserContext>({} as iUserContext);
 
 export const UserProvider = ({ children }: iUserContextProps) => {
@@ -72,7 +76,7 @@ export const UserProvider = ({ children }: iUserContextProps) => {
   const submitRegister = async (body: iSubmitRegister) => {
     try {
       setLoading(true);
-      await api.post("/users", body);
+      await api.post<iRegisterResponse>("/users", body);
       toast.success("Cadastro realizado com sucesso!");
       navigate("/");
       setLoading(false);
@@ -85,7 +89,7 @@ export const UserProvider = ({ children }: iUserContextProps) => {
   const submitLogin = async (body: iSubmitLogin) => {
     try {
       setLoading(true);
-      const { data } = await api.post("/sessions", body);
+      const { data } = await api.post<iLoginResponse>("/sessions", body);
       toast.success("Login realizado com sucesso!");
       localStorage.setItem("@KenzieHub:token", data.token);
       localStorage.setItem("@KenzieHub:userId", data.user.id);
@@ -99,14 +103,14 @@ export const UserProvider = ({ children }: iUserContextProps) => {
   };
 
   useEffect(() => {
-    async function LoadUser() {
+    async function LoadUser(): Promise<void> {
       const token = localStorage.getItem("@KenzieHub:token");
       if (token) {
         api.defaults.headers = {
           authorization: `Bearer ${token}`,
         } as CommonHeaderProperties;
         try {
-          const { data } = await api.get("/profile");
+          const { data } = await api.get<iUser>("/profile");
           setUser(data);
         } catch (err) {
           console.error(err);
