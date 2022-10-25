@@ -73,7 +73,7 @@ export const UserProvider = ({ children }: iUserContextProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
-  const submitRegister = async (body: iSubmitRegister) => {
+  const submitRegister = async (body: iSubmitRegister): Promise<void> => {
     try {
       setLoading(true);
       await api.post<iRegisterResponse>("/users", body);
@@ -86,7 +86,7 @@ export const UserProvider = ({ children }: iUserContextProps) => {
     }
   };
 
-  const submitLogin = async (body: iSubmitLogin) => {
+  const submitLogin = async (body: iSubmitLogin): Promise<void> => {
     try {
       setLoading(true);
       const { data } = await api.post<iLoginResponse>("/sessions", body);
