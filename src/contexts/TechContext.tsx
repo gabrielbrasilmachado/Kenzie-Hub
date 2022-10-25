@@ -59,7 +59,7 @@ export const TechProvider = ({ children }: iTechsContextProps) => {
   const [currentTech, setCurrentTech] = useState<iTechs | undefined>(undefined);
   const [listLoading, setListLoading] = useState<boolean>(true);
 
-  const submitTech = async (body: iSubmitTech) => {
+  const submitTech = async (body: iSubmitTech): Promise<void> => {
     try {
       setListLoading(true);
       const { data } = await api.post<iSubmitTechResponse>(
@@ -77,7 +77,7 @@ export const TechProvider = ({ children }: iTechsContextProps) => {
     }
   };
 
-  const editTech = async (data: iEditTech) => {
+  const editTech = async (data: iEditTech): Promise<void> => {
     try {
       setListLoading(true);
       await api.put<iEditTechResponse>(`/users/techs/${currentTech?.id}`, data);
@@ -89,7 +89,7 @@ export const TechProvider = ({ children }: iTechsContextProps) => {
     }
   };
 
-  const deleteTech = async () => {
+  const deleteTech = async (): Promise<void> => {
     try {
       setListLoading(true);
       await api.delete(`/users/techs/${currentTech?.id}`);
